@@ -142,23 +142,20 @@ def build_message(row, is_test=False):
         lines.append("🌿 Open NutriAI for your personalized wellness plan.")
 
     message = EmailMessage()
-message["Subject"] = (
-    "✅ NutriAI Test Reminder"
-    if is_test
-    else "🥗 NutriAI Wellness Reminder"
-)
+    message["Subject"] = (
+        "✅ NutriAI Test Reminder" if is_test else "🥗 NutriAI Wellness Reminder"
+    )
+    message["From"] = f"NutriAI <{EMAIL_USER}>"
+    message["To"] = row["email"]
 
-message["From"] = f"NutriAI <{EMAIL_USER}>"
-message["To"] = row["email"]
     body = [
-    greeting,
-    "",
-    "This is your NutriAI reminder:" if not is_test
-    else "Your NutriAI email reminder setup is working.",
-    "",
-    *lines,
-    "",
-]
+        greeting,
+        "",
+        "This is your NutriAI reminder:" if not is_test else "Your NutriAI email reminder setup is working.",
+        "",
+        *lines,
+        "",
+    ]
     if NUTRIAI_URL:
         body.extend([f"Open NutriAI: {NUTRIAI_URL}", ""])
 
