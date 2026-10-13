@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NutriAI</title>
+<link rel="stylesheet" href="css/styles.css">
+
+</head>
+<body>
+<header class="top"><div class="nav"><div class="brand" onclick="show('landing')"><div class="leaf">🌿</div>Nutri<span class="ai">AI</span></div><nav class="links"><a href="#features" onclick="goLandingSection('features',event)">Features</a><a href="#why-personalized" onclick="goLandingSection('why-personalized',event)">Why Personalized?</a><a href="#how-ai-helps" onclick="goLandingSection('how-ai-helps',event)">How AI Helps</a><a href="#about" onclick="goLandingSection('about',event)">About</a></nav><div class="actions"><button class="ghost" id="langBtn" onclick="toggleLanguage()">◎ हिन्दी</button><button class="primary" id="topBtn" onclick="start()">Get Started →</button></div></div></header>
+
+<section id="landing">
+<div class="hero">
+  <div class="pill">🧠 AI-Powered Nutrition Science</div>
+  <h1>Your Personal<br><span>AI Nutritionist</span></h1>
+  <p>Get personalized diet plans, wellness scores, deficiency checks, and health guidance — tailored to your profile and goals.</p>
+  <button class="primary" onclick="start()">✨ Start My Plan</button>
+</div>
+
+<section class="marketing-section" id="features">
+  <div class="marketing-wrap">
+    <h2>Everything You Need</h2>
+    <p class="marketing-sub">Comprehensive health and nutrition tools in one place</p>
+    <div class="marketing-grid tools-grid">
+      <div class="tool-card"><div class="tool-icon">◎</div><h3>BMI Calculator</h3><p>Instant body mass index analysis with health category</p></div>
+      <div class="tool-card"><div class="tool-icon">🍴</div><h3>Diet Plan</h3><p>Breakfast, lunch, dinner, and snacks with nutrients</p></div>
+      <div class="tool-card"><div class="tool-icon">💧</div><h3>Water Intake</h3><p>Daily hydration target based on weight and activity</p></div>
+      <div class="tool-card"><div class="tool-icon">〽</div><h3>Exercise Plan</h3><p>Personalized workout recommendations</p></div>
+      <div class="tool-card"><div class="tool-icon">♡</div><h3>Disease Guidance</h3><p>Food recommendations for health conditions</p></div>
+      <div class="tool-card"><div class="tool-icon">🛡️</div><h3>Deficiency Checker</h3><p>Identify nutrient gaps in your diet</p></div>
+      <div class="tool-card"><div class="tool-icon">⌗</div><h3>Label Scanner</h3><p>Demo food-label analysis workflow</p></div>
+      <div class="tool-card"><div class="tool-icon">👨‍🍳</div><h3>Recipe Generator</h3><p>Healthy recipes from your ingredients</p></div>
+      <div class="tool-card"><div class="tool-icon">🛒</div><h3>Grocery List</h3><p>Smart shopping list for your diet plan</p></div>
+      <div class="tool-card"><div class="tool-icon">💬</div><h3>AI Health Coach</h3><p>Nutrition guidance in this project demo</p></div>
+      <div class="tool-card"><div class="tool-icon">ϟ</div><h3>Food Swaps</h3><p>Healthier alternatives for common foods</p></div>
+      <div class="tool-card"><div class="tool-icon">☾</div><h3>Sleep & Wellness</h3><p>Lifestyle recommendations for better health</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="marketing-section personalized-section" id="why-personalized">
+  <div class="marketing-wrap">
+    <h2>Why Personalized Nutrition?</h2>
+    <p class="marketing-sub">Every body is unique. A diet that works for one person may not work for another.</p>
+    <div class="marketing-grid why-grid">
+      <div class="why-card"><h3>Age & Growth</h3><p>Nutritional needs change across life stages. Growing teens need different nutrients than adults or seniors, so recommendations should consider age and development.</p></div>
+      <div class="why-card"><h3>Activity & Lifestyle</h3><p>A sedentary person and an athlete have very different calorie and nutrient requirements. Activity level directly affects protein, carbohydrate, and hydration needs.</p></div>
+      <div class="why-card"><h3>Health Conditions</h3><p>Conditions such as diabetes, PCOS, thyroid issues, or hypertension can affect food choices. Personalized plans should account for these needs carefully.</p></div>
+      <div class="why-card"><h3>Goals Matter</h3><p>Weight loss, muscle building, or general wellness each need a different approach to portions, meal balance, and daily habits.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="marketing-section" id="how-ai-helps">
+  <div class="marketing-wrap">
+    <h2>How AI Helps</h2>
+    <p class="marketing-sub">From your input to personalized guidance in seconds</p>
+    <div class="marketing-grid ai-flow">
+      <div class="ai-step"><div class="step-icon">👥</div><div class="step-num">Step 1</div><h3>User Input</h3><p>Share your age, weight, goals, and health details</p></div>
+      <div class="ai-step"><div class="step-icon">🧠</div><div class="step-num">Step 2</div><h3>AI Analysis</h3><p>Our engine processes your health profile</p></div>
+      <div class="ai-step"><div class="step-icon">📊</div><div class="step-num">Step 3</div><h3>Nutritional Assessment</h3><p>Calculate BMI, calorie targets, macros, and nutrition risks</p></div>
+      <div class="ai-step"><div class="step-icon">🍴</div><div class="step-num">Step 4</div><h3>Diet Plan</h3><p>Personalized meals with nutrients and reasoning</p></div>
+      <div class="ai-step"><div class="step-icon">♡</div><div class="step-num">Step 5</div><h3>Wellness Guidance</h3><p>Exercise, sleep, hydration, and lifestyle recommendations</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="about-section" id="about">
+  <div class="marketing-wrap">
+    <div class="about-panel">
+      <div class="about-logo">🌿</div>
+      <h2>NutriAI: AI-Based Personalized Diet Recommendation System</h2>
+      <div class="theme">Developed as a Science Project under the theme: <b>Health, Nutrition &amp; Wellness</b></div>
+      <div class="project-card">
+        <div class="project-line">🏫 <b>Amity International School, Noida</b></div>
+        <div class="project-line muted">📖 Guide Teacher: <b>Ms. Sonali Jain</b></div>
+        <div class="project-divider"></div>
+        <div class="team-title">Team Members</div>
+        <div class="team-chips">
+          <span class="team-chip">Swastik Jain</span>
+          <span class="team-chip">Smarth Mohanty</span>
+          <span class="team-chip">Harshit Sethi</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marketing-footer">
+  <div class="mini-brand">🌿 NutriAI</div>
+  <p>AI-Based Personalized Diet Recommendation System<br>Health, Nutrition &amp; Wellness — Science Project</p>
+  <p>These recommendations are for educational purposes and do not replace professional medical advice.</p>
+</div>
+</section>
+
+<section id="onboard" class="hidden"><div class="onboard-bg"><div class="onboard"><h1>Let's Build Your Plan</h1><p>Tell us about yourself so we can create personalized recommendations</p><div class="stepper" id="stepper"></div><div class="form-card">
+<div id="s1"><div class="title"><span>👤</span><h2>Personal Info</h2></div><div class="field"><label>Full Name</label><input id="name" placeholder="Enter your name"></div><div class="two"><div class="field"><label>Age</label><input id="age" type="number" placeholder="Years"></div><div class="field"><label>Gender</label><select id="gender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div></div></div>
+<div id="s2" class="hidden"><div class="title"><span>📏</span><h2>Body Metrics</h2></div><div class="two"><div class="field"><label>Height (cm)</label><input id="height" type="number" placeholder="e.g. 170"></div><div class="field"><label>Weight (kg)</label><input id="weight" type="number" placeholder="e.g. 65"></div></div><div class="label">Activity Level</div><div class="choices c2" data-group="activity"><button class="choice" data-v="Sedentary">Sedentary</button><button class="choice" data-v="Lightly Active">Lightly Active</button><button class="choice" data-v="Moderately Active">Moderately Active</button><button class="choice sel" data-v="Very Active">Very Active</button></div></div>
+<div id="s3" class="hidden"><div class="title"><span>🌿</span><h2>Diet & Goals</h2></div><div class="label">Dietary Preference</div><div class="choices c3" data-group="diet"><button class="choice sel" data-v="Vegetarian">▤ Vegetarian</button><button class="choice" data-v="Non-Vegetarian">🍗 Non-Vegetarian</button><button class="choice" data-v="Vegan">🌱 Vegan</button></div><div class="label space">Health Goal</div><div class="choices c2" data-group="goal"><button class="choice sel" data-v="Weight Loss">⚖ Weight Loss</button><button class="choice" data-v="Weight Gain">💪 Weight Gain</button><button class="choice" data-v="Muscle Building">🏋️ Muscle Building</button><button class="choice" data-v="General Wellness">🧘 General Wellness</button></div><div class="two space"><div class="field"><label>Budget</label><select id="budget"><option>Low</option><option selected>Moderate</option><option>Premium</option></select></div><div class="field"><label>Region</label><select id="region"><option selected>Pan-Indian</option><option>North Indian</option><option>South Indian</option><option>East Indian</option><option>West Indian</option></select></div></div></div>
+<div id="s4" class="hidden"><div class="title"><span>♡</span><h2>Health Conditions</h2></div><div class="label">Do you have any existing health conditions?</div><div class="chips" id="chips"></div><div class="field"><label>Any food allergies? (comma separated)</label><input id="allergies" placeholder="e.g. peanuts, gluten"></div></div>
+<div class="form-actions"><button class="secondary hidden" id="back" onclick="prev()">Back</button><span></span><button class="primary" id="next" onclick="next()">Continue</button></div>
+</div></div></div></section>
+
+<section id="dashboard" class="hidden"><div class="wrap dash">
+<div class="profile"><div><p>Welcome back,</p><h1 id="dname">Guest</h1><div class="tags"><span class="tag" id="tag1"></span><span class="tag" id="tag2"></span><span class="tag" id="tag3"></span><span class="tag" id="tag4"></span></div></div><div class="score"><div class="ring" id="ring" style="--score:78%"><div class="ringin"><strong id="scoreVal">78</strong><span>/100</span></div></div><div class="scorelab" id="scoreLab">⚡ Good</div></div></div>
+<div class="metrics"><div class="metric"><small>🔥 Daily Calories</small><strong id="cal">2000 kcal</strong></div><div class="metric"><small>💧 Water Intake</small><strong id="wat">2.5 L</strong></div><div class="metric"><small>〽 Protein Target</small><strong id="pro">80g</strong></div><div class="metric"><small>☾ Sleep</small><strong>8-10 hours</strong></div></div>
+<div class="tabs" id="tabs"></div><div id="content"></div>
+</div></section>
+
+<div id="toast" class="toast"></div>
+<div id="coachWidget" class="coach-widget hidden">
+  <div class="coach-fab" onclick="coachToggle()" title="Open NutriAI Coach"><img src="assets/health-coach-leaf.png" alt="NutriAI Health Coach" class="coach-leaf-icon"></div>
+  <div class="coach-header">
+    <div class="coach-avatar"><img src="assets/health-coach-leaf.png" alt="" class="coach-leaf-icon"></div>
+    <div class="coach-head-text"><b>NutriAI Coach</b><small>Your health companion</small></div>
+    <button class="coach-min" onclick="coachToggle()" title="Minimize">↘</button>
+  </div>
+  <div id="coachBody" class="coach-body"></div>
+  <div class="coach-compose">
+    <div class="coach-compose-row">
+      <input id="coachInput" class="coach-input" placeholder="Ask about nutrition..." onkeydown="if(event.key==='Enter'){event.preventDefault();coachSend()}">
+      <button class="coach-send" onclick="coachSend()" title="Send">➤</button>
+    </div>
+    <div class="coach-note">Local project coach · educational guidance only</div>
+  </div>
+</div>
+
+<footer>Educational project demo only — not a substitute for professional medical advice.</footer>
+
+<script src="js/core.js"></script>
+<script src="data/nutritionEngine.js"></script>
+<script src="data/mealDatabase.js"></script>
+<script src="js/coach.js"></script>
+<script src="js/navigation.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/features/mealPlanner.js"></script>
+<script src="js/features/tools.js"></script>
+<script src="js/features/progress.js"></script>
+<script src="js/features/explore.js"></script>
+<script src="js/features/fitnessCompare.js"></script>
+<script src="js/features/family.js"></script>
+<script src="js/features/cravings.js"></script>
+<script src="js/features/lunchbox.js"></script>
+<script src="js/features/sports.js"></script>
+<script src="js/features/travel.js"></script>
+<script src="js/features/pdfExport.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config/supabaseConfig.js"></script>
+<script src="js/features/reminders.js"></script>
+<script src="js/render.js"></script>
+
+</body></html>
