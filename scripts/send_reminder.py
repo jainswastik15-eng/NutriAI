@@ -6,7 +6,6 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from email.message import EmailMessage
-from email.utils import formatdate, make_msgid, formataddr
 from zoneinfo import ZoneInfo
 
 
@@ -143,14 +142,10 @@ def build_message(row, is_test=False):
 
     message = EmailMessage()
 
-    # Message headers — these must be set while inside the function scope
     message["Subject"] = "Test"
-    message["From"] = formataddr(("NutriAI", EMAIL_USER))
+    message["From"] = f"NutriAI" <{EMAIL_USER}>"
     message["To"] = row["email"]
-    message["Date"] = formatdate(localtime=True)
-    message["Message-ID"] = make_msgid(domain="gmail.com")
-    message["Reply-To"] = EMAIL_USER
-
+    
     body = [
         greeting,
         "",
@@ -236,11 +231,6 @@ def main():
             try:
                 message = build_message(row, is_test=is_test)
                 refused = smtp.send_message(message)
-
-if refused:
-    print("Gmail refused the recipient.")
-else:
-    print("Gmail SMTP accepted the message.")
 
                 timestamp = datetime.now(timezone.utc).isoformat()
                 payload = {"updated_at": timestamp}
