@@ -121,6 +121,7 @@ def scheduled_is_due(row, local_now):
     # intentionally not limited to an exact one-minute window.
     return now_minutes >= scheduled_minutes
 
+
 def build_message(row, is_test=False):
     name = (row.get("profile_name") or "").strip()
     greeting = f"Hi {name}," if name else "Hi!"
@@ -141,37 +142,24 @@ def build_message(row, is_test=False):
         lines.append("🌿 Open NutriAI for your personalized wellness plan.")
 
     message = EmailMessage()
-
-    message["Subject"] = "Test"
-    message["From"] = f"NutriAI" <{EMAIL_USER}>"
+    message["Subject"] = (
+        "✅ NutriAI Test Reminder"
+        if is_test
+        else "🥗 NutriAI Wellness Reminder"
+    )
+    message["From"] = f"NutriAI <{EMAIL_USER}>"
     message["To"] = row["email"]
-    
+
     body = [
         greeting,
         "",
-        "This is your NutriAI reminder:" if not is_test else "Your NutriAI email reminder setup is working.",
+        "This is your NutriAI reminder:" if not is_test
+        else "Your NutriAI email reminder setup is working:",
         "",
         *lines,
         "",
     ]
-    if NUTRIAI_URL:
-        body.extend([f"Open NutriAI: {NUTRIAI_URL}", ""])
 
-    body.extend([
-        "You enabled this reminder inside NutriAI.",
-        "NutriAI is an educational wellness project and does not replace professional medical advice.",
-    ])
-
-    message.set_content("\n".join(body))
-    return message
-    body = [
-        greeting,
-        "",
-        "This is your NutriAI reminder:" if not is_test else "Your NutriAI email reminder setup is working.",
-        "",
-        *lines,
-        "",
-    ]
     if NUTRIAI_URL:
         body.extend([f"Open NutriAI: {NUTRIAI_URL}", ""])
 
@@ -230,7 +218,7 @@ def main():
         for row, is_test, local_now in due:
             try:
                 message = build_message(row, is_test=is_test)
-                refused = smtp.send_message(message)
+                smtp.send_message(message)
 
                 timestamp = datetime.now(timezone.utc).isoformat()
                 payload = {"updated_at": timestamp}
@@ -260,3 +248,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
