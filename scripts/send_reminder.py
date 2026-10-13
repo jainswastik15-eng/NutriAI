@@ -122,7 +122,6 @@ def scheduled_is_due(row, local_now):
     # intentionally not limited to an exact one-minute window.
     return now_minutes >= scheduled_minutes
 
-
 def build_message(row, is_test=False):
     name = (row.get("profile_name") or "").strip()
     greeting = f"Hi {name}," if name else "Hi!"
@@ -144,14 +143,32 @@ def build_message(row, is_test=False):
 
     message = EmailMessage()
 
-message["Subject"] = "Test"
-message["From"] = formataddr(("NutriAI", EMAIL_USER))
-message["To"] = row["email"]
-message["Date"] = formatdate(localtime=True)
-message["Message-ID"] = make_msgid(domain="gmail.com")
-message["Reply-To"] = EMAIL_USER
+    # Message headers — these must be set while inside the function scope
+    message["Subject"] = "Test"
+    message["From"] = formataddr(("NutriAI", EMAIL_USER))
+    message["To"] = row["email"]
+    message["Date"] = formatdate(localtime=True)
+    message["Message-ID"] = make_msgid(domain="gmail.com")
+    message["Reply-To"] = EMAIL_USER
 
-message.set_content( "Hello from NutriAI" )
+    body = [
+        greeting,
+        "",
+        "This is your NutriAI reminder:" if not is_test else "Your NutriAI email reminder setup is working.",
+        "",
+        *lines,
+        "",
+    ]
+    if NUTRIAI_URL:
+        body.extend([f"Open NutriAI: {NUTRIAI_URL}", ""])
+
+    body.extend([
+        "You enabled this reminder inside NutriAI.",
+        "NutriAI is an educational wellness project and does not replace professional medical advice.",
+    ])
+
+    message.set_content("\n".join(body))
+    return message
     body = [
         greeting,
         "",
