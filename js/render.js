@@ -1,5 +1,6 @@
 function render(){let p=state.profile;if(state.tab==="Diet Plan"){
   const d=diseaseInfo(p), mv=macroValues(p), meals=mealSet(p);
+  const hasSelectedDisease=(p.conditions||[]).some(x=>x&&x!=="None");
   const bmiPos=Math.max(1,Math.min(99,((+p.m.bmi-15)/(40-15))*100));
   const ageNote=+p.age<18
     ? "Because you are under 18, calorie and BMI interpretation should be reviewed with a parent/guardian and qualified health professional."
@@ -27,17 +28,17 @@ function render(){let p=state.profile;if(state.tab==="Diet Plan"){
       <div class="season-tip">💡 <b>Seasonal Health Tips</b><br>• Include leafy greens and colorful vegetables • Enjoy warm soups without excess salt • Get regular daylight and physical activity when possible</div>
     </div></section>
 
-    <section class="section-box">
-      <div class="green-head"><h2>🏥 Disease-Specific Diet Plans</h2><p>Educational nutrition guidance based on selected health conditions</p></div>
+    ${hasSelectedDisease?`<section class="section-box">
+      <div class="green-head"><h2>🏥 Disease-Specific Diet Plans</h2><p>Educational nutrition guidance based on the health condition(s) selected in your profile</p></div>
       <div class="inner">
-        <div class="disease-title">▤ &nbsp; ${d.title}<div style="font-size:11px;font-weight:500;margin-top:6px">Active profile: ${(d.conditions||["General Wellness"]).join(" • ")}</div><div class="keyfoods">Personalized food focus: ${d.foods.map(x=>`<span class="tagpill">${x}</span>`).join("")}</div></div>
+        <div class="disease-title">▤ &nbsp; ${d.title}<div style="font-size:11px;font-weight:500;margin-top:6px">Active profile: ${(d.conditions||[]).join(" • ")}</div><div class="keyfoods">Personalized food focus: ${d.foods.map(x=>`<span class="tagpill">${x}</span>`).join("")}</div></div>
         <div class="eat-grid">
           <div><div class="list-title ok">✅ EAT MORE / PRIORITIZE</div>${d.eat.map(x=>`<div class="advice-row good">✓ ${x}</div>`).join("")}</div>
           <div><div class="list-title avoid">⛔ LIMIT / AVOID</div>${d.avoid.map(x=>`<div class="advice-row bad">× ${x}</div>`).join("")}</div>
         </div>
         <div class="small-disclaimer">⚠ For educational purposes only. Consult a qualified healthcare professional for medical nutrition therapy.</div>
       </div>
-    </section>
+    </section>`:""}
 
     <div class="planner-layout">
       <section class="section-box planner">
@@ -66,15 +67,13 @@ function render(){let p=state.profile;if(state.tab==="Diet Plan"){
 
     <div class="meal-area">
       <section>
-        <div class="meal-top"><div><h2>🤖 AI Meal Plan for ${p.name}</h2><div style="font-size:12px;color:#7a8596">${bmiInterpretation(p)} • ${p.activity} • ${p.goal}</div></div><div class="meal-top-actions"><button class="pdf-btn" onclick="exportDietPlanPDF()">📄 Export PDF</button><button class="regen" onclick="regenerateMeals(this)">↻ Regenerate</button></div></div>
+        <div class="meal-top"><div><h2>🤖 AI Meal Plan for ${p.name}</h2><div style="font-size:12px;color:#7a8596">${bmiInterpretation(p)} • ${p.activity} • ${p.goal}</div></div><div class="meal-top-actions"><button class="pdf-btn" onclick="exportDietPlanPDF()">📄 Export PDF</button><button class="regen" onclick="regenerateMeals(this)"><svg class="ui-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.1 9a8 8 0 0 1 13.5-2L20 12M4 12l1.4 5a8 8 0 0 0 13.5-2"/></svg><span>Regenerate</span></button></div></div>
         <div class="summary">🎯 <b>Your Plan Summary:</b> ${ageNote} Prioritize quality protein, vegetables, fiber-rich carbohydrates and regular hydration.</div>
-        <div class="focuses">Generated plan #${(state.mealVariant||0)+1} • Cooking: ${cookingMeta().label} • Skill: ${state.cookingSkill}<br><b>Personalization:</b> ${diseasePersonalizationText(p)}<br>Food focus: ${d.foods.slice(0,4).map(x=>`<span class="focus">${x}</span>`).join("")}</div>
-        <div class="meal-cards">${meals.map(mealCardDetailed).join("")}</div>
+        <div class="focuses"><b>Combined profile:</b> ${combinedPersonalizationText(p)}<br><b>Health logic:</b> ${diseasePersonalizationText(p)}<br>Food focus: ${d.foods.slice(0,4).map(x=>`<span class="focus">${x}</span>`).join("")}</div>
+        ${meals.length?`<div class="meal-cards">${meals.map(mealCardDetailed).join("")}</div>`:`<div class="allergy-alert"><b>No safe matching meals found.</b> Review allergies or consult a dietitian. NutriAI will not recommend meals that conflict with the entered ingredients.</div>`}
+        <p class="allergy-alert">⚠ Allergy checks use listed recipe ingredients only. They cannot guarantee freedom from traces, substitutions, or cross-contact. Verify every ingredient and food label.</p>
 
-        <div class="snack-grid space">
-          <div class="section-box snack"><div class="time">🍎 Morning Snack (10–11am)</div><h4>Buttermilk with Roasted Cumin</h4><div class="meta"><span class="badge">🥛 200ml</span><span class="badge">🔥 60 kcal</span><span class="badge">⏰ 2 mins</span></div><p style="font-size:12px;color:#6f7a8c">A light, hydrating snack. Choose unsweetened versions.</p><div class="alt">🔄 Alt: 5 almonds + 2 walnuts</div></div>
-          <div class="section-box snack"><div class="time">🌿 Evening Snack (4–5pm)</div><h4>Roasted Makhana</h4><div class="meta"><span class="badge">1 cup</span><span class="badge">🔥 100 kcal</span><span class="badge">⏰ 10 mins</span></div><p style="font-size:12px;color:#6f7a8c">Crunchy snack with portion control.</p><div class="alt">🔄 Alt: Fruit + plain curd</div></div>
-        </div>
+        <div class="snack-grid space">${getPersonalizedMealPools(p).snacks.slice(0,2).map((snack,i)=>`<div class="section-box snack"><div class="time">${i===0?"🍎 Morning Snack":"🌿 Evening Snack"}</div><h4>${snack.name}</h4><div class="meta"><span class="badge">🔥 ${snack.calories} kcal</span><span class="badge">⏰ ${snack.minutes} min</span></div><p style="font-size:12px;color:#6f7a8c">${snack.personalizationNote}</p></div>`).join("")}</div>
 
         <div class="hydration space">
           <h2>💧 Personalised Hydration Plan — ${p.m.wat}L/day</h2>
@@ -112,45 +111,51 @@ function render(){let p=state.profile;if(state.tab==="Diet Plan"){
 }
 else if(state.tab==="Weekly"){
   const names=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-  const plans=weekData(p), meal=plans[state.weekDay], ex=weeklyExercises(p);
+  const meals=weeklyDayMeals(p,state.weekDay);
+  const fallback=weekData(p)[state.weekDay];
+  const exPlan=weeklyExercisePlan(p,state.weekDay);
   const teen=+p.age<18, sleep=teen?"8–10 hours":"7–9 hours";
+  const season="Winter";
+  const breakfastLine=meals?weeklyMealLine("Breakfast",meals.breakfast,350):`<b>Breakfast:</b> ${fallback[0]} (350 kcal).`;
+  const lunchLine=meals?weeklyMealLine("Lunch",meals.lunch,400):`<b>Lunch:</b> ${fallback[1]} (400 kcal).`;
+  const dinnerLine=meals?weeklyMealLine("Dinner",meals.dinner,300):`<b>Dinner:</b> ${fallback[2]} (300 kcal).`;
+  const snackLine=meals?weeklyMealLine("Snack",meals.snack,180):`<b>Snack:</b> ${fallback[3]} (180 kcal).`;
   $("content").innerHTML=`
-    <div class="week-layout">
+    <div class="week-layout screenshot-weekly">
       <section class="week-card">
         <div class="week-head">
-          <div class="week-title"><span class="week-icon">▣</span><div><h2>Personalized Weekly Meal Plan</h2><p>${p.goal} • ${p.diet} • ${p.region}</p></div></div>
-          <button class="regen" onclick="regenerateWeek(this)">↻ Regenerate</button>
+          <div class="week-title"><span class="week-icon"><svg class="ui-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></span><div><h2>Personalized Weekly Meal Plan</h2><p>${p.goal} • ${p.diet} • ${season}</p></div></div>
+          <button class="regen" onclick="regenerateWeek(this)"><svg class="ui-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.1 9a8 8 0 0 1 13.5-2L20 12M4 12l1.4 5a8 8 0 0 0 13.5-2"/></svg><span>Regenerate</span></button>
         </div>
-        <div class="week-controls">
-          <button class="week-arrow" onclick="shiftWeekDay(-1)">‹</button>
+        <div class="week-controls screenshot-controls">
+          <button class="week-arrow" onclick="shiftWeekDay(-1)" aria-label="Previous day">‹</button>
           <div class="days">${names.map((n,i)=>`<button class="day-btn ${state.weekDay===i?"sel":""}" onclick="setWeekDay(${i})">${n}</button>`).join("")}</div>
-          <button class="week-arrow" onclick="shiftWeekDay(1)">›</button>
+          <button class="week-arrow" onclick="shiftWeekDay(1)" aria-label="Next day">›</button>
         </div>
-        <div class="day-plan">
-          <div>Day ${state.weekDay+1}</div>
-          <b>Breakfast:</b> ${meal[0]}. Approx. 250–350 kcal. <span class="why">Why: Balanced fiber and protein for a steady start.</span><br>
-          <b>Lunch:</b> ${meal[1]}. Approx. 400–500 kcal. <span class="why">Why: Supports energy and a balanced plate.</span><br>
-          <b>Dinner:</b> ${meal[2]}. Approx. 320–430 kcal. <span class="why">Why: Protein and vegetables with a lighter evening meal.</span><br>
-          <b>Snack:</b> ${meal[3]}. Approx. 100–180 kcal.<br>
-          <div class="week-tip">Tip: Chew slowly, keep regular meal timing, and adjust portions to hunger and activity.</div>
+        <div class="day-plan screenshot-day-plan">
+          <div class="day-number">Day ${state.weekDay+1}</div>
+          <div>${breakfastLine}</div>
+          <div>${lunchLine}</div>
+          <div>${dinnerLine}</div>
+          <div>${snackLine}</div>
+          <div class="week-tip"><b>Tip:</b> ${p.activity==="Sedentary"?"Build movement into the day and keep hydration regular.":"Match portions and hydration to your activity and hunger."}</div>
         </div>
       </section>
 
       <div>
-        <section class="exercise-week">
-          <div class="toprow"><span class="purple-icon">⚛</span>Exercise Plan</div>
-          <div class="exercise-summary"><div><small>◷ Duration</small><b>${p.goal==="Weight Loss"?"30–45 minutes daily":"25–40 minutes"}</b></div><div><small>▣ Frequency</small><b>${p.goal==="Muscle Building"?"3–5 days a week":"5–6 days a week"}</b></div></div>
-          <div class="week-exercises">${ex.map((x,i)=>`<div class="week-ex"><span class="week-num">${i+1}</span><span>${x}</span></div>`).join("")}</div>
-          <div class="week-info">ⓘ ${p.goal==="Weight Loss"?"Regular cardio and movement can support energy balance when paired with adequate nutrition.":"Build activity progressively and allow adequate recovery."}</div>
+        <section class="exercise-week screenshot-exercise">
+          <div class="toprow"><span class="purple-icon"><svg class="ui-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4l2 3-2 3M16 4l-2 3 2 3M5 14h14M8 20l2-3-2-3M16 20l-2-3 2-3"/></svg></span>Exercise Plan</div>
+          <div class="exercise-summary"><div><small>◷ Duration</small><b>${exPlan.duration}</b></div><div><small>▣ Frequency</small><b>${exPlan.frequency}</b></div></div>
+          <div class="week-exercises">${exPlan.exercises.map((x,i)=>`<div class="week-ex"><span class="week-num">${i+1}</span><span>${x[0]} — ${x[1]}</span></div>`).join("")}</div>
+          <div class="week-info">ⓘ ${exPlan.note}</div>
         </section>
 
         <section class="sleep-week">
-          <div class="toprow"><span class="purple-icon">〽</span>Sleep Recommendation</div>
+          <div class="toprow"><span class="purple-icon">☾</span>Sleep Recommendation</div>
           <div class="sleep-highlight"><strong>${sleep}</strong><p>${teen?"Teens generally need additional sleep for growth and development.":"Consistent sleep supports recovery, appetite regulation and wellbeing."}</p></div>
           <div class="sleep-line">🌙 Avoid caffeine around 6 hours before bedtime.</div>
           <div class="sleep-line">🌙 Keep the bedroom cool, quiet and dark.</div>
           <div class="sleep-line">🌙 Maintain a consistent sleep schedule, including weekends.</div>
-          <div class="sleep-line">🌙 Avoid very heavy meals close to bedtime.</div>
         </section>
       </div>
     </div>
@@ -167,7 +172,7 @@ else if(state.tab==="Health"){
   $("content").innerHTML=`
     <div class="health-grid">
       <section class="health-card">
-        <div class="health-title"><span class="hico">🛡</span><div><h2>Deficiency Risk Check</h2><p>Profile-based educational flags, not a diagnosis</p></div></div>
+        <div class="health-title"><span class="hico"><svg class="ui-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span><div><h2>Deficiency Risk Check</h2><p>Profile-based educational flags, not a diagnosis</p></div></div>
         ${risks.map((r,i)=>`<div class="risk-card ${r[1].includes("Low")?"low":""}"><div class="risk-head"><span>${r[1].includes("Low")?"✓":"⚠"} ${r[0]}</span><span class="risk-level">${r[1]}</span></div><p>${r[2]}</p><p>Foods to consider: ${r[3]}</p></div>`).join("")}
       </section>
 
@@ -181,7 +186,7 @@ else if(state.tab==="Health"){
     </div>
 
     <section class="prevent-card">
-      <div class="health-title"><span class="hico heartico">🛡</span><div><h2>Lifestyle Disease Prevention</h2><p>Proactive habits for general wellness</p></div></div>
+      <div class="health-title"><span class="hico heartico"><svg class="ui-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span><div><h2>Lifestyle Disease Prevention</h2><p>Proactive habits for general wellness</p></div></div>
       <div class="prevent-grid">
         <div class="prevent"><h3>Heart Health</h3><p>• Choose nuts, seeds and other unsaturated-fat foods in sensible portions</p><p>• Limit highly salted packaged foods</p><p>• Build regular physical activity into your week</p></div>
         <div class="prevent"><h3>Diabetes Prevention</h3><p>• Prefer whole grains and higher-fiber carbohydrates</p><p>• Include vegetables and protein with meals</p><p>• Maintain a healthy routine around activity and sleep</p></div>
@@ -208,63 +213,6 @@ else if(state.tab==="Health"){
 
     <div class="warning space">⚠ NutriAI provides general educational nutrition information. It does not diagnose deficiencies or health conditions and should not replace professional medical advice.</div>`;
 }
-else if(state.tab==="Tools"){
-  const recipe=state.recipeText?recipeFromIngredients(state.recipeText,p):null;
-  const metrics=demoScanMetrics();
-  $("content").innerHTML=`
-    <div class="tools-grid">
-      <section class="tool-card">
-        <div class="tool-title"><span class="tool-ico">🍲</span><div><h2>Smart Recipe Generator</h2><p>Personalized for your profile, goals & allergies</p></div></div>
-        <div class="recipe-row">
-          <input id="recipeInput" value="${state.recipeText.replaceAll('"','&quot;')}" placeholder="e.g. rice, dal, spinach, tomato...">
-          <button class="spark-btn" onclick="generateRecipe()">✨</button>
-        </div>
-        <div class="recipe-chips">
-          ${["Rice, dal, spinach","Oats, banana, almonds","Paneer, capsicum, onion","Ragi, milk, dates","Moong dal, vegetables, ginger"].map(x=>`<button class="recipe-chip" onclick="setRecipePreset('${x.replaceAll("'","\\'")}')">${x}</button>`).join("")}
-        </div>
-        ${recipe?`<div id="recipeResult" class="recipe-result">
-          <h3>${recipe.title}</h3>
-          <div class="recipe-meta"><span class="badge">🍴 ${p.diet}</span><span class="badge">🎯 ${p.goal}</span><span class="badge">⏱ ${cookingMeta().label}</span></div>
-          <div class="recipe-step"><b>Use:</b> ${recipe.ingredients}</div>
-          ${recipe.steps.map((s,i)=>`<div class="recipe-step"><b>${i+1}.</b> ${s}</div>`).join("")}
-          <div class="nutri-line">${recipe.nutrition}</div>
-        </div>`:""}
-      </section>
-
-      <section class="tool-card">
-        <div class="tool-title"><span class="tool-ico purple">⌗</span><div><h2>Nutrient Label Scanner</h2><p>Upload a food label or packaged-food photo for a project demo analysis</p></div></div>
-
-        <input id="scanInput" type="file" accept="image/*" style="display:none" onchange="handleScanFile(this)">
-        ${!state.scanData?`
-          <div class="upload-box" onclick="document.getElementById('scanInput').click()">
-            <div><div class="upload-camera">📷</div><h3>Upload Food Label or Photo</h3><p>Choose a photo of any packaged-food label</p></div>
-          </div>
-        `:`
-          <div class="scan-preview">
-            <img src="${state.scanData.url}" alt="Uploaded food label preview">
-            <div class="scan-info">
-              <h3>${state.scanData.name}</h3>
-              <p>${state.scanData.size} KB image loaded.</p>
-              <p>This one-day standalone version does not perform OCR. It demonstrates the upload-and-analysis workflow safely.</p>
-              <button class="primary scan-btn" onclick="analyzeUploadedLabel()">✨ Analyze Label</button>
-              <button class="secondary scan-btn" onclick="resetScan()">Choose Another</button>
-            </div>
-          </div>
-        `}
-        ${state.scanAnalyzed?`<div class="scan-result">
-          <h3>Demo Nutrition Review</h3>
-          <div class="scan-grid">
-            <div class="scan-metric">Calories<b>${metrics.calories}</b></div>
-            <div class="scan-metric">Protein<b>${metrics.protein}</b></div>
-            <div class="scan-metric">Added sugar<b>${metrics.sugar}</b></div>
-            <div class="scan-metric">Sodium<b>${metrics.sodium}</b></div>
-          </div>
-          <p style="font-size:12px;color:#5d6879;line-height:1.45;margin:10px 0 0">${metrics.verdict}</p>
-        </div>`:""}
-        <div class="tool-warning">⚠ Image analysis in this offline project is a demo. Always read the actual package label for serving size, allergens, calories, sodium and exact nutrient values.</div>
-      </section>
-    </div>`;
-}
 else if(state.tab==="Grocery"){
   const gd=groceryData(p), flat=groceryFlat(p), checked=flat.filter(x=>state.groceryChecked[x]).length;
   const liters=Number(p.m.wat||2), glasses=Math.max(6,Math.round(liters*4));
@@ -272,18 +220,20 @@ else if(state.tab==="Grocery"){
     <div class="grocery-layout">
       <section class="grocery-card">
         <div class="grocery-head">
-          <div class="grocery-title"><span class="grocery-ico">🛒</span><div><h2>Smart Grocery List</h2><p>Based on your meal plan, diet and selected health conditions</p></div></div>
-          <button class="refresh-btn" onclick="refreshGrocery()">↻ Refresh</button>
+          <div class="grocery-title"><span class="grocery-ico"><svg class="ui-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M2 3h3l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"/></svg></span><div><h2>Smart Grocery List</h2><p>Generated from your currently displayed meal plan, selected snack, and any lunchboxes added with Add to Grocery</p></div></div>
+          <button class="refresh-btn" onclick="refreshGrocery()"><svg class="ui-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.1 9a8 8 0 0 1 13.5-2L20 12M4 12l1.4 5a8 8 0 0 0 13.5-2"/></svg><span>Refresh</span></button>
         </div>
-        <div class="grocery-stat"><span>${flat.length} items total</span><span>${checked} checked</span></div>
+        <div class="planner-status"><b>Selected meals:</b> ${currentPersonalizedMealObjects(p).map(x=>x.name).join(" • ")||"No safe meal matches"}${(state.groceryExtras||[]).length?` • Added lunchboxes: ${state.groceryExtras.map(x=>x.name).join("; ")}`:""}</div>
+        <div class="grocery-stat"><span>${flat.length} meal-plan ingredients</span><span>${checked} checked</span></div>
+        <div class="planner-status"><b>Plan source:</b> ${effectiveRegionLabel(p)} • ${p.diet} • ${p.goal} • ${p.budget} budget • current generated plan #${(state.mealVariant||0)+1}</div>
         ${Object.entries(gd).map(([cat,items])=>`
           <div class="grocery-section">
             <h3>${cat}</h3>
             <div class="grocery-items">
-              ${items.map(item=>`<label class="gitem ${state.groceryChecked[item]?"checked":""}"><input type="checkbox" ${state.groceryChecked[item]?"checked":""} onchange="toggleGrocery('${item.replaceAll("'","\\'")}')"><span>${item}</span></label>`).join("")}
+              ${items.map(item=>`<label class="gitem ${state.groceryChecked[item]?"checked":""}"><input type="checkbox" ${state.groceryChecked[item]?"checked":""} onchange="toggleGrocery(decodeURIComponent('${encodeURIComponent(item)}'))"><span>${item}</span></label>`).join("")}
             </div>
           </div>`).join("")}
-        <div class="grocery-note">Items are suggestions for a project demo. Adjust quantities, brands and foods to your household needs, allergies and professional guidance.</div>
+        <div class="grocery-note">This list follows the currently selected NutriAI meal plan and excludes entered allergens from the curated recipes. Verify labels, cross-contact and quantities before purchasing.</div>
       </section>
 
       <aside class="side-stack">
@@ -298,7 +248,7 @@ else if(state.tab==="Grocery"){
         </section>
 
         <section class="water-card">
-          <h2>💧 Water Intake Guide</h2>
+          <h2 class="heading-with-icon"><svg class="ui-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2s6 7 6 12a6 6 0 1 1-12 0c0-5 6-12 6-12Z"/><path d="M9 15a3 3 0 0 0 3 3"/></svg><span>Water Intake Guide</span></h2>
           <div class="water-highlight"><strong>${liters.toFixed(1)} Liters / day</strong><p>Estimate based on your entered weight and profile.</p></div>
           <div class="water-list">
             • That's about ${glasses} glasses (250 ml each)<br>
@@ -314,7 +264,7 @@ else if(state.tab==="Grocery"){
 else if(state.tab==="Family"){
   $("content").innerHTML=`
     <section class="family-shell">
-      <div class="family-title"><span class="family-icon">👥</span><div><h2>Family Diet Mode</h2><p>Get age-appropriate meal suggestions for every family member</p></div></div>
+      <div class="family-title"><span class="family-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="4"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg></span><div><h2>Family Diet Mode</h2><p>Get age-appropriate meal suggestions for every family member</p></div></div>
       <div class="family-form">
         <input id="famName" placeholder="Name *">
         <input id="famAge" type="number" placeholder="Age *">
@@ -324,7 +274,7 @@ else if(state.tab==="Family"){
       <button class="family-add" onclick="addFamilyMember()">＋ Add Family Member</button>
 
       ${!state.familyMembers.length?`
-        <div class="family-empty"><div><div style="font-size:42px">👥</div><strong>No family members added yet</strong><p style="font-size:12px">Add a member above to see their personalized meal suggestion.</p></div></div>
+        <div class="family-empty"><div><div class="empty-state-icon"><svg class="ui-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.2a4 4 0 0 1 0 7.6"/></svg></div><strong>No family members added yet</strong><p style="font-size:12px">Add a member above to see their personalized meal suggestion.</p></div></div>
       `:`
         <div class="family-grid">${state.familyMembers.map(m=>{const fp=familyMealPlan(m);return `
           <div class="family-card">
@@ -391,6 +341,7 @@ else if(state.tab==="Progress"){
         </table>
       </section>
     `}
+    ${mealFeedbackProgressHtml()}
     <div class="progress-note">⚠ For educational tracking only. Daily weight and wellness values naturally fluctuate and should not be used as a medical diagnosis.</div>`;
 }
 else if(state.tab==="Ingredients"){
@@ -398,7 +349,7 @@ else if(state.tab==="Ingredients"){
   const ingredientReady=state.ingredients.length>0 || state.ingredientDraft.trim().length>0;
   $("content").innerHTML=`
     <section class="feature-shell">
-      <div class="feature-title"><span class="feature-icon">🍲</span><div><h2>Ingredient-Based Meal Planner</h2><p>Choose ingredients or type what you have. The green button generates your plan only after you click it.</p></div></div>
+      <div class="feature-title"><span class="feature-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 4 15 15a2 2 0 0 1-3 3L2 7a2 2 0 0 1 3-3Z"/><path d="m7 9 2-2m2 6 2-2m2 6 2-2"/></svg></span><div><h2>Ingredient-Based Meal Planner</h2><p>Choose ingredients or type what you have. The green button generates your plan only after you click it.</p></div></div>
 
       <div class="full-row">
         <input id="ingredientInput" value="${escapeNutriText(state.ingredientDraft)}" placeholder="Type ingredients, e.g. paneer, spinach, tomato..." oninput="setIngredientDraft(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault();addIngredient()}">
@@ -433,6 +384,9 @@ else if(state.tab==="Ingredients"){
           <p style="font-size:12px;color:#6f7b8e;margin-top:12px">Meal matching is approximate. Check allergies, ingredients and nutrition independently.</p>
         </div>`:""}
     </section>`;
+}
+else if(state.tab==="Label Scanner"){
+  $("content").innerHTML=renderLabelScannerTab(p);
 }
 else if(state.tab==="Restaurant"){
   const chains=["McDonald's","Domino's","Subway","Haldiram's","KFC","Starbucks","Burger King","Pizza Hut"];
@@ -474,13 +428,15 @@ else if(state.tab==="Restaurant"){
     </section>`;
 }
 else if(state.tab==="Festival"){
-  const festivals=[["Diwali","▤","Festival of Lights"],["Holi","🎨","Festival of Colors"],["Navratri","🕉️","Nine Nights"],["Eid","🌙","Eid Celebration"],["Christmas","🎄","Christmas Feast"],["Pongal","🌾","Harvest Festival"],["Onam","🌺","Onam Sadhya"],["Baisakhi","🌻","Punjab Harvest"]];
+  const festivals=festivalOptionsForProfile(p);
+  if(state.festival && !festivals.some(f=>f[0]===state.festival))state.festival="";
   const advice=festivalAdvice(state.festival,p);
   $("content").innerHTML=`
     <section class="feature-shell">
-      <div class="feature-title"><span class="feature-icon" style="background:#f7e8ff;color:#a04fe9">🎉</span><div><h2>Festival Mode</h2><p>Celebrate guilt-free — healthier festive eating, personalized</p></div></div>
-      <div class="festival-grid">${festivals.map(f=>`<button class="festival-card ${state.festival===f[0]?"sel":""}" onclick="selectFestival('${f[0]}')"><span class="emoji">${f[1]}</span><b>${f[0]}</b><small>${f[2]}</small></button>`).join("")}</div>
-      ${state.festival?`<div class="festival-result"><h3>${state.festival} Smart Celebration Tips</h3>${advice.map(x=>`<p>✓ ${x}</p>`).join("")}<p><b>Personalized note:</b> Keep your ${p.goal.toLowerCase()} goal in mind without trying to make festival eating “perfect.”</p></div>`:""}
+      <div class="feature-title"><span class="feature-icon" style="background:#f7e8ff;color:#a04fe9">🎉</span><div><h2>Festival Mode</h2><p>Festivals shown for ${festivalProfileKey(p)} and personalized to your full nutrition profile</p></div></div>
+      <div class="planner-status"><b>Profile:</b> ${combinedPersonalizationText(p)}</div>
+      <div class="festival-grid">${festivals.map(f=>`<button class="festival-card ${state.festival===f[0]?"sel":""}" onclick="selectFestival('${f[0].replaceAll("'","\\'")}')"><span class="emoji">${f[1]}</span><b>${f[0]}</b><small>${f[2]}</small></button>`).join("")}</div>
+      ${state.festival?`<div class="festival-result"><h3>${state.festival} Smart Celebration Tips</h3>${advice.map(x=>`<p>✓ ${x}</p>`).join("")}<p><b>Personalized note:</b> Recommendations consider your ${p.diet.toLowerCase()} diet, ${p.goal.toLowerCase()} goal, budget, selected conditions and entered allergies.</p></div>`:""}
     </section>`;
 }
 else if(state.tab==="Eco"){
@@ -521,7 +477,7 @@ else if(state.tab==="Cravings"){
           <div class="mode-actions"><button class="primary" onclick="chooseCraving(${i})">Choose This</button><button class="secondary" onclick="addCravingToday(${i})">Add to Today</button></div>
         </article>`).join("")}
       </div>
-      <div class="mode-footer-actions"><button class="secondary" onclick="anotherCraving()">↻ Another Option</button></div>
+      <div class="mode-footer-actions"><button class="secondary" onclick="anotherCraving()"><svg class="ui-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.1 9a8 8 0 0 1 13.5-2L20 12M4 12l1.4 5a8 8 0 0 0 13.5-2"/></svg><span>Another Option</span></button></div>
       ${state.cravingSelected?`<div class="success-note">✓ Selected: <b>${state.cravingSelected}</b></div>`:""}
       ${state.cravingAdded?`<div class="success-note">✓ Added to today's demo plan: <b>${state.cravingAdded}</b></div>`:""}
       <div class="mode-note">Cravings are normal. NutriAI does not label foods as “good” or “bad”; this tool simply offers practical choices.</div>
@@ -531,7 +487,8 @@ else if(state.tab==="Lunchbox"){
   const results=lunchboxResults(p);
   $("content").innerHTML=`
     <section class="mode-shell">
-      <div class="mode-title"><span class="mode-icon">▣</span><div><h2>NutriAI Smart Lunchbox</h2><p>Portable lunch ideas for school, college or work.</p></div></div>
+      <div class="mode-title"><span class="mode-icon">▣</span><div><h2>NutriAI Smart Lunchbox</h2><p>Portable lunch ideas ranked using region, activity, diet, goal, conditions, allergies and budget.</p></div></div>
+      <div class="planner-status"><b>Combined profile:</b> ${combinedPersonalizationText(p)}</div>
       <div class="option-columns">
         <div><div class="mode-label">Lunchbox for</div><div class="choice-grid">${["School","College","Office"].map(x=>`<button class="choice-btn ${state.lunchboxFor===x?"selected":""}" onclick="setLunchboxOption('lunchboxFor','${x}')">${x}</button>`).join("")}</div></div>
         <div><div class="mode-label">Preparation time</div><div class="choice-grid">${["5","10","20","30"].map(x=>`<button class="choice-btn ${state.lunchboxTime===x?"selected":""}" onclick="setLunchboxOption('lunchboxTime','${x}')">${x} min</button>`).join("")}</div></div>
@@ -540,16 +497,17 @@ else if(state.tab==="Lunchbox"){
       <div class="choice-grid">${["No reheating","Can reheat","Mess-free","High protein","Budget friendly"].map(x=>`<button class="choice-btn ${state.lunchboxPref===x?"selected":""}" onclick="setLunchboxOption('lunchboxPref','${x.replaceAll("'","\\'")}')">${x}</button>`).join("")}</div>
       <button class="primary mode-generate" onclick="generateLunchbox()">✨ Generate Lunchbox</button>
 
-      ${state.lunchboxGenerated?`<div class="mode-result-grid">
+      ${state.lunchboxGenerated?(results.length?`<div class="mode-result-grid">
         ${results.map((x,i)=>`<article class="mode-card">
-          <div class="match-pill">${state.lunchboxFor} • ${state.lunchboxPref}</div>
+          <div class="match-pill">Match ${Math.max(1,Math.min(99,x[13]))}/100 • ${state.lunchboxFor} • ${x[9]} budget</div>
           <h3>${x[0]}</h3>
           <div class="lunch-list"><b>Main:</b> ${x[0]}<br><b>Side:</b> ${x[1]}<br><b>Snack/Fruit:</b> ${x[2]}<br><b>Drink:</b> ${x[3]}</div>
-          <div class="mode-metrics"><span>🔥 ${x[4]} kcal</span><span>💪 ${x[5]}g protein</span><span>⏱ ~${state.lunchboxTime} min target</span></div>
+          <div class="mode-metrics"><span>🔥 ${x[4]} kcal</span><span>💪 ${x[5]}g protein</span><span>⏱ ${x[8]} min</span></div>
+          <p class="mode-why"><b>Why for you:</b> ${effectiveRegionLabel(p)} cuisine fit, ${p.diet.toLowerCase()} preference, ${p.activity.toLowerCase()} activity, ${p.goal.toLowerCase()} goal, ${p.budget.toLowerCase()} budget and entered restrictions.</p>
           <div class="mode-actions"><button class="primary" onclick="packLunchbox(${i})">Pack This</button><button class="secondary" onclick="lunchboxAddGrocery(${i})">Add to Grocery</button></div>
         </article>`).join("")}
       </div>
-      <div class="mode-footer-actions"><button class="secondary" onclick="regenerateLunchbox()">↻ Regenerate</button></div>`:""}
+      <div class="mode-footer-actions"><button class="secondary" onclick="regenerateLunchbox()"><svg class="ui-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.1 9a8 8 0 0 1 13.5-2L20 12M4 12l1.4 5a8 8 0 0 0 13.5-2"/></svg><span>Regenerate</span></button></div>`:`<div class="allergy-alert"><b>No lunchbox matches found.</b> Review entered allergies or budget; NutriAI will not knowingly include a listed allergen.</div>`):""}
       ${state.lunchboxPacked?`<div class="success-note">✓ ${state.lunchboxPacked}</div>`:""}
       <div class="mode-note">For packed foods that normally require refrigeration, use appropriate cold storage and safe food-handling practices.</div>
     </section>`;
@@ -558,7 +516,8 @@ else if(state.tab==="Sports"){
   const sp=sportsModePlan(p);
   $("content").innerHTML=`
     <section class="mode-shell">
-      <div class="mode-title"><span class="mode-icon">⌁</span><div><h2>NutriAI Sports Mode</h2><p>Fuel, hydration and recovery guidance around your activity.</p></div></div>
+      <div class="mode-title"><span class="mode-icon">⌁</span><div><h2>NutriAI Sports Mode</h2><p>Fuel, hydration and recovery guidance linked to your meal profile and training session.</p></div></div>
+      <div class="planner-status"><b>Personalized with:</b> ${sp.personalization}</div>
       <div class="mode-label">Sport</div>
       <div class="choice-grid sports-grid">${["Cricket","Football","Running","Cycling","Swimming","Basketball","Badminton","Gym / Strength Training"].map(x=>`<button class="choice-btn ${state.sportType===x?"selected":""}" onclick="setSportsOption('sportType','${x.replaceAll("'","\\'")}')">${x}</button>`).join("")}</div>
 
@@ -583,7 +542,8 @@ else if(state.tab==="Travel"){
   const ts=travelSnacks(p), tp=travelPlan(p);
   $("content").innerHTML=`
     <section class="mode-shell">
-      <div class="mode-title"><span class="mode-icon">✈</span><div><h2>NutriAI Travel Mode</h2><p>Eat smarter while travelling.</p></div></div>
+      <div class="mode-title"><span class="mode-icon">✈</span><div><h2>NutriAI Travel Mode</h2><p>Travel food choices filtered through your region, diet, goal, activity, budget, conditions and allergies.</p></div></div>
+      <div class="planner-status"><b>Combined profile:</b> ${combinedPersonalizationText(p)}</div>
       <div class="mode-label">1 · Trip type</div>
       <div class="choice-grid travel-grid">${["Road Trip","Flight","Train Journey","Bus Journey","School Trip","Office Travel","Vacation","Long Commute"].map(x=>`<button class="choice-btn ${state.travelType===x?"selected":""}" onclick="setTravelOption('travelType','${x}')">${x}</button>`).join("")}</div>
       <div class="option-columns">
@@ -599,6 +559,7 @@ else if(state.tab==="Travel"){
       ${state.travelGenerated?`
         <div class="travel-summary">
           <div class="travel-strip"><b>${state.travelType}</b><span>${state.travelDuration}</span><span>${state.travelTime}</span><span>${state.travelPriority}</span></div>
+          <div class="planner-status"><b>Travel personalization:</b> ${tp.personalization}</div>
           <div class="sports-plan-grid">
             <article class="mode-card accent-green"><span class="plan-kicker">BEFORE TRAVEL</span><h3>Balanced departure meal</h3><p>${tp.before}</p></article>
             <article class="mode-card accent-blue"><span class="plan-kicker">DURING JOURNEY</span><h3>Simple travel timeline</h3><p>${tp.timeline}</p></article>
@@ -607,7 +568,7 @@ else if(state.tab==="Travel"){
           </div>
           <h3 class="mode-subhead">Smart Travel Snacks</h3>
           <div class="mode-result-grid">${ts.map(x=>`<article class="mode-card"><div class="match-pill">${x[3]}</div><h3>${x[0]}</h3><div class="mode-metrics"><span>🔥 ${x[1]} kcal</span><span>💪 ${x[2]}g protein</span></div><p>${x[4]}</p></article>`).join("")}</div>
-          <div class="mode-footer-actions"><button class="secondary" onclick="regenerateTravel()">↻ More Snack Options</button></div>
+          <div class="mode-footer-actions"><button class="secondary" onclick="regenerateTravel()"><svg class="ui-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.1 9a8 8 0 0 1 13.5-2L20 12M4 12l1.4 5a8 8 0 0 0 13.5-2"/></svg><span>More Snack Options</span></button></div>
           <div class="travel-check"><h3>🎒 Travel Food Checklist</h3><label><input type="checkbox"> Water bottle</label><label><input type="checkbox"> Main packed meal</label><label><input type="checkbox"> Portable snack</label><label><input type="checkbox"> Fruit</label><label><input type="checkbox"> Napkins / cutlery if needed</label></div>
           <div class="mode-note warning-soft">Food safety: ${tp.safety}</div>
         </div>`:""}
@@ -622,10 +583,10 @@ else if(state.tab==="Fitness"){
   $("content").innerHTML=`
     <section class="fit-shell">
       <div class="fit-top">
-        <div class="fit-heading"><span class="fit-heading-icon">〽</span><div><h2>Yoga & Fitness Recommendations</h2><p>Personalized for your BMI, age, goal & selected conditions</p></div></div>
-        <button class="regen" onclick="regenerateFitness(this)">↻ Regenerate</button>
+        <div class="fit-heading"><span class="fit-heading-icon"><svg class="ui-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-8 4 16 2-8h6"/></svg></span><div><h2>Yoga & Fitness Recommendations</h2><p>Personalized for age, BMI, activity level, health goal and relevant conditions</p></div></div>
+        <button class="regen" onclick="regenerateFitness(this)"><svg class="ui-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.1 9a8 8 0 0 1 13.5-2L20 12M4 12l1.4 5a8 8 0 0 0 13.5-2"/></svg><span>Regenerate</span></button>
       </div>
-      <div class="fit-summary">🎯 ${fp.focus}${fp.teen?" Because you are under 18, keep intensity age-appropriate and involve a parent/guardian or qualified professional for structured training.":""}</div>
+      <div class="fit-summary">🎯 ${fp.focus}${fp.teen?" Because you are under 18, keep intensity age-appropriate and involve a parent/guardian or qualified professional for structured training.":""}<br><small><b>Profile basis:</b> ${fp.basis}</small></div>
 
       <div class="fit-section-label yoga">🧘 Yoga Poses</div>
       <div class="fit-cards">${fp.plan.yoga.map(fitCard).join("")}</div>

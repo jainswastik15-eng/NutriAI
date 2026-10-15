@@ -4,3 +4,6 @@ function prev(){if(state.step>1){state.step--;stepUI()}}
 function next(){if(state.step===1&&(!$("name").value||!$("age").value||!$("gender").value)){alert("Enter name, age and gender");return}if(state.step===2&&(!$("height").value||!$("weight").value)){alert("Enter height and weight");return}if(state.step<4){state.step++;stepUI();return}build()}
 document.addEventListener("click",e=>{if(e.target.classList.contains("choice")){let g=e.target.closest("[data-group]");g.querySelectorAll(".choice").forEach(b=>b.classList.remove("sel"));e.target.classList.add("sel");state[g.dataset.group]=e.target.dataset.v}if(e.target.classList.contains("chip")){let v=e.target.dataset.v;if(v==="None"){state.conditions=state.conditions.includes("None")?[]:["None"]}else{state.conditions=state.conditions.filter(x=>x!=="None");state.conditions=state.conditions.includes(v)?state.conditions.filter(x=>x!==v):[...state.conditions,v]}renderChips()}});
 function renderChips(){$("chips").innerHTML=conds.map(c=>`<button class="chip ${state.conditions.includes(c)?"sel":""}" data-v="${c}">${c}</button>`).join("")}renderChips();
+
+function updateCountryVisibility(){const field=$("countryField");if(field)field.classList.toggle("hidden",$("region").value!=="International");}
+document.addEventListener("change",function(e){if(e.target && e.target.id==="region")updateCountryVisibility();});

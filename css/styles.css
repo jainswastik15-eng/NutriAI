@@ -624,3 +624,80 @@ html{scroll-behavior:smooth}
   .reminder-actions{flex-direction:column}
   .reminder-actions button{width:100%}
 }
+/* V30 meal feedback and personalized meal safety */
+.international-country{min-width:210px}.profile-hint{font-size:12px;color:#68778b;grid-column:1/-1;margin:6px 0}
+.meal-feedback{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:13px 0 8px}
+.meal-feedback .vote{border:1px solid #cadfd4;border-radius:10px;background:#fff;padding:7px 12px;cursor:pointer;font-weight:650;color:#32624b}
+.meal-feedback .vote.active-like{background:#d8f5e2;border-color:#269e5c}.meal-feedback .vote.active-dislike{background:#ffe7e7;border-color:#d17a7a;color:#913e3e}
+.meal-feedback small{font-size:10px;color:#738296}.allergy-alert{border:1px solid #eacfa4;background:#fffaf0;color:#805c29;padding:12px 15px;border-radius:12px;margin:12px 0;font-size:12px;line-height:1.55}
+.feedback-progress{padding:20px;margin:20px 0}.feedback-progress p{font-size:12px;color:#758094}.feedback-progress svg{width:100%;max-height:190px}
+
+.leaf svg{width:21px;height:21px;stroke:#fff;fill:none}.tool-icon svg,.family-icon svg,.feature-icon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* V35 complete icon pass — Base44-inspired pale mint icon tiles and crisp outline SVGs */
+.ui-svg{width:18px;height:18px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.title span{color:#279d70;background:#d8f8e8;border-radius:10px}
+.title span .ui-svg{width:20px;height:20px}
+.mini-brand{display:flex;align-items:center;gap:7px}.mini-leaf{width:25px;height:25px;border-radius:8px;background:#47bd86;color:#fff;display:grid;place-items:center}.mini-leaf .ui-svg{width:16px;height:16px}
+.about-logo .ui-svg{width:34px;height:34px;color:#fff}
+.regen,.refresh-btn,.secondary,.meal-feedback .vote{display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.regen .ui-svg,.refresh-btn .ui-svg,.secondary .ui-svg,.meal-feedback .vote .ui-svg{width:16px;height:16px;flex:none}
+.meal-feedback .vote{font-weight:500;color:#536172;border-color:#d8dee8;background:#fff}
+.meal-feedback .vote.active-like{color:#247954}.meal-feedback .vote.active-dislike{color:#913e3e}
+.grocery-ico .ui-svg,.hico .ui-svg,.fit-heading-icon .ui-svg{width:21px;height:21px}
+.heading-with-icon{display:flex;align-items:center;gap:8px}.heading-with-icon .ui-svg{width:21px;height:21px;color:#2b9a70}
+.empty-state-icon{width:48px;height:48px;margin:0 auto 10px;display:grid;place-items:center;color:#d7dce4}.empty-state-icon .ui-svg{width:40px;height:40px}
+.alt-label-icon{width:16px;height:16px;display:inline-grid;place-items:center;border-radius:4px;background:#e8eef4;color:#7b8c9e}
+.alt-label-icon .ui-svg{width:12px;height:12px}
+
+
+/* V36 — show two alternatives under each meal card */
+.meal-alternatives{margin-top:14px;display:grid;gap:12px}
+.alt-card{background:#f6f8fb;border:1px solid #e2e8ef;border-radius:14px;padding:12px 12px 11px;color:#5f6d80}
+.alt-card-label{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#8d9aab;margin-bottom:8px}
+.alt-card-name{font-size:14px;line-height:1.35;font-weight:800;color:#334255;margin-bottom:6px}
+.alt-card-meta{font-size:12px;color:#7e8b9c;line-height:1.45}
+.alt-card-macros{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.alt-macro{font-size:12px;border-radius:999px;padding:3px 8px;background:#fff}
+.alt-macro.p{color:#2a65d9;background:#edf4ff}
+.alt-macro.c{color:#d98a24;background:#fff3dd}
+.alt-macro.f{color:#dd3d88;background:#ffe7f2}
+.alt-macro.fi{color:#539949;background:#edf9e8}
+.alt-card-note{font-size:12px;line-height:1.45;color:#6f7a8c;font-style:italic;margin:0}
+
+
+/* V37 — Base44-style per-meal regenerate, interactive alternatives, and grocery repair */
+.single-regen{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid #8ae4bc;background:#fff;color:#258861;border-radius:10px;padding:8px 12px;margin:0 0 10px;cursor:pointer;font-size:12px;font-weight:600}
+.single-regen:hover{background:#effcf6}.single-regen .ui-svg{width:16px;height:16px}
+.meal-alternatives{margin-top:12px;display:grid;gap:12px}
+.alt-card{background:#f6f7f9;border:1px solid #e4e8ed;border-radius:12px;padding:12px;color:#5f6d80}
+.alt-card-label{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#98a3b2;margin-bottom:8px}
+.alt-card-name{font-size:14px;line-height:1.35;font-weight:750;color:#344255;margin-bottom:6px}
+.alt-card-meta{font-size:12px;color:#778497;line-height:1.4}
+.alt-card-macros{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0}
+.alt-macro{font-size:11px;border-radius:999px;padding:3px 7px}.alt-macro.p{color:#2a65d9;background:#edf4ff}.alt-macro.c{color:#d98a24;background:#fff3dd}.alt-macro.f{color:#dd3d88;background:#ffe7f2}.alt-macro.fi{color:#539949;background:#edf9e8}
+.alt-card-note{font-size:12px;line-height:1.45;color:#6f7a8c;font-style:italic;margin:0 0 10px}
+.alt-feedback{display:flex;gap:7px;flex-wrap:wrap}.alt-feedback .vote{display:inline-flex;align-items:center;gap:6px;border:1px solid #d8dee8;background:#fff;color:#536172;border-radius:9px;padding:6px 10px;cursor:pointer;font-size:11px}.alt-feedback .vote .ui-svg{width:14px;height:14px}.alt-feedback .vote.active-like{background:#d8f5e2;border-color:#269e5c;color:#247954}.alt-feedback .vote.active-dislike{background:#ffe7e7;border-color:#d17a7a;color:#913e3e}
+.grocery-card .grocery-items:empty:after{content:"No ingredients available for this plan.";font-size:12px;color:#8b96a5}
+
+
+/* V38 — Weekly tab matched to the supplied Base44 screenshots */
+.screenshot-weekly{align-items:start}
+.screenshot-weekly .week-card,.screenshot-weekly .exercise-week{min-height:480px}
+.screenshot-weekly .week-head{margin-bottom:16px}
+.screenshot-weekly .week-icon,.screenshot-weekly .purple-icon{width:34px;height:34px;border-radius:10px}
+.screenshot-weekly .week-icon .ui-svg,.screenshot-weekly .purple-icon .ui-svg{width:18px;height:18px}
+.screenshot-controls{margin-top:6px;margin-bottom:16px}
+.screenshot-controls .week-arrow{font-size:22px;display:grid;place-items:center}
+.screenshot-controls .day-btn{min-width:42px;padding:7px 11px}
+.screenshot-day-plan{min-height:176px;padding:16px 17px;line-height:1.36}
+.screenshot-day-plan>div{margin:1px 0}
+.screenshot-day-plan .day-number{margin-bottom:2px;color:#475368}
+.weekly-meal-why{font-style:italic;color:#5b6473}
+.screenshot-exercise .exercise-summary{margin-bottom:15px}
+.screenshot-exercise .week-ex{min-height:52px}
+@media(max-width:900px){.screenshot-weekly .week-card,.screenshot-weekly .exercise-week{min-height:0}}
+
+
+/* V39 — Nutrient Label Scanner */
+.label-scan-shell{margin-top:24px}.label-scan-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}.label-scan-head h2{margin:0;color:#246c53;font-size:20px}.label-scan-head p{margin:4px 0 0;color:#7a8596;font-size:12px}.label-scan-icon{width:38px;height:38px;border-radius:12px;background:#d9f8e9;color:#279d70;display:grid;place-items:center;flex:none}.label-scan-icon .ui-svg{width:22px;height:22px}.local-badge{font-size:11px;background:#effaf5;color:#277b5b;border:1px solid #ccefdc;padding:7px 10px;border-radius:999px}.label-scan-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.label-upload-card,.label-text-card{background:#fff;border:1px solid #bfead6;border-radius:16px;padding:18px}.label-upload-card h3,.label-text-card h3,.label-facts h3{margin:0 0 13px;color:#2e3c50;font-size:15px}.label-drop{min-height:250px;border:1.5px dashed #9adfc1;border-radius:14px;background:#f7fffb;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer}.label-drop img{width:100%;height:300px;object-fit:contain;background:#f7faf9}.label-drop-empty{text-align:center;color:#637486;display:grid;gap:7px;justify-items:center}.label-drop-empty b{color:#2d5f4d}.label-drop-empty small{font-size:11px}.scan-camera{width:48px;height:48px;border-radius:15px;background:#d9f8e9;color:#279d70;display:grid;place-items:center;font-size:24px}.label-scan-actions,.label-text-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.label-file-btn{display:inline-flex;align-items:center;justify-content:center;cursor:pointer}.ghost-btn{border:0;background:#f3f5f7;color:#657184;border-radius:10px;padding:9px 13px;cursor:pointer}.label-text-card textarea{width:100%;min-height:300px;resize:vertical;border:1px solid #a9e8ca;border-radius:12px;padding:12px;line-height:1.45;color:#334255;background:#fbfffd;font-family:inherit;box-sizing:border-box}.label-helper,.label-privacy{font-size:11px;color:#7b8798;line-height:1.5;margin:10px 0 0}.label-privacy{background:#f6f9fb;border-radius:10px;padding:9px 10px}.label-error{margin-top:10px;background:#fff4e8;border:1px solid #f1cca7;color:#8a5a20;border-radius:10px;padding:9px 10px;font-size:12px}.ocr-progress{margin-top:12px}.ocr-progress-top{display:flex;justify-content:space-between;font-size:11px;color:#637486}.ocr-track{height:8px;background:#eef2f5;border-radius:999px;overflow:hidden;margin-top:5px}.ocr-track span{height:100%;display:block;background:#4fbe88;border-radius:999px;transition:width .15s}.label-result-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;margin-top:20px}.label-facts,.label-fit{padding:18px}.label-serving{display:flex;justify-content:space-between;gap:10px;background:#f6f8fb;border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:12px}.label-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.label-metric{background:#f8fafc;border:1px solid #edf0f3;border-radius:10px;padding:10px}.label-metric small{display:block;color:#7d8999;font-size:10px;margin-bottom:3px}.label-metric b{font-size:16px;color:#243244}.label-score-row{display:flex;align-items:center;justify-content:space-between;gap:15px}.label-score-row small{font-size:10px;color:#7d8999;font-weight:800;letter-spacing:.06em}.label-score-row h3{font-size:19px;color:#246c53;margin:5px 0}.label-score-ring{--scan-score:70%;width:82px;height:82px;border-radius:50%;background:conic-gradient(#4fbe88 var(--scan-score),#e7eef0 0);display:grid;place-items:center;position:relative;flex:none}.label-score-ring:after{content:"";position:absolute;width:62px;height:62px;background:#fff;border-radius:50%}.label-score-ring b,.label-score-ring span{z-index:1;position:absolute}.label-score-ring b{font-size:21px;transform:translateY(-5px);color:#2b6f55}.label-score-ring span{font-size:9px;transform:translateY(15px);color:#8a96a5}.label-fit-basis{font-size:11px;color:#748093;line-height:1.5;background:#f5f8fb;padding:9px 10px;border-radius:10px}.label-allergy-alert{background:#fff0f0;border:1px solid #efbcbc;color:#8b3b3b;border-radius:10px;padding:10px;font-size:12px;line-height:1.45}.label-insights{display:grid;gap:9px;margin-top:12px}.label-insights h4{margin:0 0 7px;font-size:13px}.label-insights p{margin:5px 0;padding:8px 9px;border-radius:9px;font-size:11px;line-height:1.45}.label-insights p.good{background:#effaf4;color:#326c53}.label-insights p.warn{background:#fff7ea;color:#7f5d27}@media(max-width:900px){.label-scan-grid,.label-result-grid{grid-template-columns:1fr}}@media(max-width:600px){.label-scan-head{flex-direction:column}.label-metrics{grid-template-columns:1fr}.label-drop{min-height:210px}.label-drop img{height:240px}}

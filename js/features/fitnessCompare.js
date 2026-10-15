@@ -42,18 +42,65 @@ function fitnessPlan(p){
     }
   ];
 
-  const focus = diabetic
-    ? "This plan emphasizes steady, moderate movement, gentle yoga and basic strength work. Regular activity can support overall fitness and may help with blood-glucose management as part of a clinician-approved care plan."
-    : p.goal==="Muscle Building"
-      ? "This plan combines mobility, light cardio and bodyweight strength work to support gradual strength development and recovery."
-      : p.goal==="Weight Loss"
-        ? "This plan combines regular low-impact cardio, yoga, stretching and basic strength work to support sustainable activity and energy balance."
-        : "This plan focuses on balanced movement, flexibility, cardiovascular fitness, strength and relaxation.";
+  const c=(p.conditions||[]).map(x=>String(x).toLowerCase());
+  const hasHeart=c.some(x=>x.includes("heart")||x.includes("hypertension")||x.includes("blood pressure")||x.includes("high bp"));
+  const hasJoint=c.some(x=>x.includes("arthritis")||x.includes("joint"));
+  const hasAsthma=c.some(x=>x.includes("asthma"));
+  let selected=v;
+  if(hasHeart||hasJoint||p.activity==="Sedentary")selected=1;
+  else if(p.goal==="Muscle Building")selected=2;
+  else if(p.activity==="Very Active")selected=0;
 
-  return {focus,teen,plan:variants[v]};
+  const focus = diabetic
+    ? "This plan emphasizes steady movement, strength and recovery while keeping diabetes care instructions in mind."
+    : hasHeart
+      ? "This plan uses lower-intensity, steady movement because your profile includes a cardiovascular or blood-pressure condition."
+      : hasJoint
+        ? "This plan prioritizes lower-impact movement and supported strength work because your profile includes joint concerns."
+        : p.goal==="Muscle Building"
+          ? "This plan emphasizes strength work, mobility and enough recovery to support your muscle-building goal."
+          : p.goal==="Weight Loss"
+            ? "This plan combines regular cardio, mobility and strength work to support sustainable activity and energy balance."
+            : "This plan balances mobility, cardiovascular fitness, strength and recovery for general wellness.";
+
+  let activityFactor={"Sedentary":0.78,"Lightly Active":0.9,"Moderately Active":1,"Very Active":1.15}[p.activity]||1;
+  if(teen)activityFactor=Math.min(activityFactor,1);
+  if(hasHeart||hasJoint)activityFactor=Math.min(activityFactor,0.85);
+  const goalFactor={cardio:p.goal==="Weight Loss"?1.15:p.goal==="Muscle Building"?0.9:1,strength:p.goal==="Muscle Building"?1.25:1};
+  const cloneGroup=(arr,type)=>arr.map(x=>{
+    const y=x.slice();
+    const g=type==="cardio"?goalFactor.cardio:type==="strength"?goalFactor.strength:1;
+    y[1]=Math.max(4,Math.round(y[1]*activityFactor*g));
+    y[2]=Math.max(0,Math.round(y[2]*activityFactor*g));
+    y[6]=(hasHeart||hasJoint||p.activity==="Sedentary")?"Gentle":p.activity==="Very Active"?"Moderate":"Beginner";
+    if(hasAsthma&&type==="cardio")y[5]+=" Keep your prescribed asthma action plan and rescue medication available.";
+    if(diabetic&&type==="cardio")y[5]+=" Follow your diabetes care plan for glucose monitoring around exercise.";
+    return y;
+  });
+  const base=JSON.parse(JSON.stringify(variants[selected]));
+  // A real goal/activity-specific exercise menu, not just modified captions.
+  if(!hasHeart&&!hasJoint&&!teen){
+    if(p.goal==="Muscle Building"){
+      base.strength=[["Progressive resistance training",p.activity==="Very Active"?35:22,0,["Warm up with light movement","Choose a manageable resistance","Perform 2–3 sets of 6–12 controlled repetitions","Rest between sets and increase load gradually"],"Builds strength with gradual progression.","Get technique guidance; stop for pain."]];
+      base.cardio=[["Easy recovery walk",15,0,["Walk at a comfortable pace","Maintain conversational breathing","Cool down gently"],"Supports recovery between resistance sessions.","Avoid overtraining."]];
+    }else if(p.goal==="Weight Loss"&&p.activity!=="Sedentary"){
+      base.cardio=[[p.activity==="Very Active"?"Interval walk-jog":"Brisk interval walking",p.activity==="Very Active"?35:25,0,["Warm up for 5 minutes","Alternate comfortable and brisk intervals","Cool down for 5 minutes"],"Adds cardiovascular variety.","Adjust pace to your ability and symptoms."]];
+    }else if(p.activity==="Sedentary"){
+      base.cardio=[["Short beginner walking breaks",10,0,["Walk gently for 3 minutes","Continue at an easy pace","Repeat later in the day if comfortable"],"Builds an achievable movement habit.","Start gently and increase gradually."]];
+    }
+  }
+  const plan={
+    yoga:cloneGroup(base.yoga,"yoga"),
+    stretch:cloneGroup(base.stretch,"stretch"),
+    cardio:cloneGroup(base.cardio,"cardio"),
+    strength:cloneGroup(base.strength,"strength"),
+    breath:cloneGroup(base.breath,"breath")
+  };
+  const basis=`Age ${p.age} • BMI ${p.m?.bmi||"—"} • ${p.activity} • ${p.goal}${(p.conditions||[]).filter(x=>x&&x!=="None").length?` • ${(p.conditions||[]).filter(x=>x&&x!=="None").join(" + ")}`:""}`;
+  return {focus,teen,plan,basis};
 }
 function fitCard(x){
-  return `<div class="fit-ex-card"><span class="fit-difficulty">Beginner</span><h3>${x[0]}</h3><div class="fit-meta">⏱ ${x[1]} min ${x[2]?`&nbsp;&nbsp;🔥 ${x[2]} kcal`:``}</div><div class="fit-steps">Steps:<ol>${x[3].map(s=>`<li>${s}</li>`).join("")}</ol></div><div class="fit-benefit">✨ Benefits: ${x[4]}</div><div class="fit-caution">⚠ Precautions: ${x[5]}</div></div>`;
+  return `<div class="fit-ex-card"><span class="fit-difficulty">${x[6]||"Beginner"}</span><h3>${x[0]}</h3><div class="fit-meta">⏱ ${x[1]} min ${x[2]?`&nbsp;&nbsp;🔥 ${x[2]} kcal`:``}</div><div class="fit-steps">Steps:<ol>${x[3].map(s=>`<li>${s}</li>`).join("")}</ol></div><div class="fit-benefit">✨ Benefits: ${x[4]}</div><div class="fit-caution">⚠ Precautions: ${x[5]}</div></div>`;
 }
 
 

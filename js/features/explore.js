@@ -169,19 +169,64 @@ function restaurantGenerate(){
   state.restaurantGenerated=true;
   render();
 }
+const FESTIVALS_BY_PROFILE={
+  "Pan-Indian":[["Diwali","🪔","Festival of Lights"],["Holi","🎨","Festival of Colors"],["Navratri","🕉️","Nine Nights"],["Eid","🌙","Eid Celebration"],["Christmas","🎄","Christmas Feast"]],
+  "North Indian":[["Diwali","🪔","Festival of Lights"],["Holi","🎨","Festival of Colors"],["Navratri","🕉️","Nine Nights"],["Baisakhi","🌻","Punjab Harvest"],["Lohri","🔥","Winter Harvest"]],
+  "South Indian":[["Pongal","🌾","Tamil Harvest"],["Onam","🌺","Kerala Celebration"],["Ugadi","🌿","New Year Festival"],["Deepavali","🪔","Festival of Lights"],["Vishu","🌼","Kerala New Year"]],
+  "East Indian":[["Durga Puja","🌺","Autumn Celebration"],["Chhath Puja","☀️","Sun Festival"],["Rath Yatra","🛕","Chariot Festival"],["Poila Boishakh","🌿","Bengali New Year"],["Diwali","🪔","Festival of Lights"]],
+  "West Indian":[["Ganesh Chaturthi","🐘","Ganesh Festival"],["Navratri","💃","Nine Nights"],["Gudi Padwa","🌿","Maharashtrian New Year"],["Diwali","🪔","Festival of Lights"],["Uttarayan","🪁","Kite Festival"]],
+  "United States":[["Thanksgiving","🦃","Thanksgiving Meal"],["Christmas","🎄","Christmas Feast"],["Independence Day","🎆","Summer Celebration"],["Halloween","🎃","Halloween Treats"],["New Year","✨","New Year Celebration"]],
+  "United Kingdom":[["Christmas","🎄","Christmas Feast"],["Easter","🐣","Easter Celebration"],["Bonfire Night","🎆","Bonfire Night"],["New Year","✨","New Year Celebration"],["Summer Bank Holiday","🌤️","Holiday Gathering"]],
+  "Italy":[["Christmas","🎄","Natale"],["Easter","🐣","Pasqua"],["Ferragosto","☀️","Summer Holiday"],["Carnival","🎭","Carnevale"],["New Year","✨","Capodanno"]],
+  "Japan":[["New Year","🎍","Shōgatsu"],["Hanami","🌸","Cherry Blossom Season"],["Obon","🏮","Obon Festival"],["Tanabata","🎋","Star Festival"],["Setsubun","👹","Seasonal Festival"]],
+  "Mexico":[["Day of the Dead","💀","Día de Muertos"],["Independence Day","🎆","Fiestas Patrias"],["Christmas","🎄","Navidad"],["Three Kings Day","👑","Día de Reyes"],["Cinco de Mayo","🎉","Cultural Celebration"]]
+};
+function festivalProfileKey(p){return p.region==="International"?(p.country||"United States"):(p.region||"Pan-Indian")}
+function festivalOptionsForProfile(p){return FESTIVALS_BY_PROFILE[festivalProfileKey(p)]||FESTIVALS_BY_PROFILE["Pan-Indian"]}
 function selectFestival(v){state.festival=v;render()}
 function festivalAdvice(v,p){
-  const m={
-    "Diwali":["Enjoy sweets in small portions and avoid grazing all day.","Pair festive snacks with a regular protein-rich meal.","Choose roasted/baked snacks more often than deep-fried ones."],
-    "Holi":["Stay hydrated through the day.","Choose homemade thandai with less added sugar if desired.","Balance festive foods with fruit, curd, vegetables and protein."],
-    "Navratri":["Use singhara/kuttu/ragi-style foods with vegetables rather than only fried fasting foods.","Include curd, paneer, milk or plant proteins where appropriate.","Keep hydration regular during fasting periods."],
-    "Eid":["Enjoy celebratory foods mindfully and spread richer dishes across meals.","Add salad, fruit and grilled dishes alongside biryani/kebabs.","Keep sweet drinks and desserts to moderate portions."],
-    "Christmas":["Balance rich festive meals with vegetables and leaner protein options.","Choose fruit-based desserts sometimes.","Avoid skipping meals to compensate for celebration foods."],
-    "Pongal":["Use lentils and vegetables with rice-based dishes for a more balanced plate.","Keep added ghee moderate if that fits your goals.","Include fresh fruit and curd where appropriate."],
-    "Onam":["Enjoy the sadya variety but keep portions comfortable.","Prioritize vegetables, lentils and less-fried dishes first.","Treat sweets as part of the celebration, not an all-day snack."],
-    "Baisakhi":["Pair festive breads/rice dishes with dal, vegetables and curd.","Choose grilled/tandoori preparations more often than fried starters.","Keep sugary beverages occasional."]
+  const specific={
+    "Diwali":["Keep sweets as planned portions instead of grazing all day.","Pair festive snacks with a normal protein-rich meal.","Choose roasted or baked snacks more often when practical."],
+    "Deepavali":["Enjoy sweets in small planned portions.","Balance rice-based festive foods with dal, vegetables and protein.","Keep fried snacks occasional rather than continuous."],
+    "Holi":["Stay hydrated through the day.","Use less-added-sugar versions of festive drinks when practical.","Balance festive foods with fruit, curd or a plant alternative and protein."],
+    "Navratri":["Build fasting meals around vegetables plus a protein source.","Use kuttu/singhara-style foods without relying only on fried items.","Keep hydration regular during fasting periods."],
+    "Baisakhi":["Pair breads or rice with dal, vegetables and curd or alternatives.","Choose grilled/tandoori dishes more often than fried starters.","Keep sweet drinks occasional."],
+    "Lohri":["Portion sesame and jaggery sweets because they are energy dense.","Include a balanced main meal instead of only snacks.","Use roasted foods and nuts/seeds only if they fit your allergy profile."],
+    "Pongal":["Use lentils and vegetables with rice-based dishes for a more balanced plate.","Keep added ghee moderate if that fits your goal.","Include fresh fruit and curd or a plant alternative where appropriate."],
+    "Onam":["Enjoy the sadya variety while keeping portions comfortable.","Prioritize vegetables, lentils and less-fried dishes first.","Treat sweets as part of the celebration, not an all-day snack."],
+    "Ugadi":["Balance festive rice dishes with dal, vegetables and protein.","Keep sweets portioned.","Use your normal hydration routine through the day."],
+    "Vishu":["Enjoy the feast variety while keeping portions comfortable.","Prioritize vegetable and lentil dishes.","Keep rich desserts to a planned portion."],
+    "Durga Puja":["Choose one or two favorite festive foods rather than sampling everything repeatedly.","Add vegetables and protein to the main meal.","Keep hydration regular during long outings."],
+    "Chhath Puja":["Plan balanced meals around fasting periods.","Rehydrate steadily after fasting.","Keep sweets and fried offerings to comfortable portions."],
+    "Rath Yatra":["Choose simple balanced meals around travel or crowds.","Carry water and a safe snack if needed.","Keep portion sizes comfortable in hot weather."],
+    "Poila Boishakh":["Balance rice and festive dishes with dal, vegetables and protein.","Keep sweets as a planned portion.","Choose grilled or lightly cooked options when available."],
+    "Ganesh Chaturthi":["Enjoy modak in a planned portion.","Balance the rest of the meal with vegetables and protein.","Choose steamed options more often than fried versions where practical."],
+    "Gudi Padwa":["Pair festive foods with a balanced main meal.","Keep sweets portioned.","Include vegetables, pulses and hydration through the day."],
+    "Uttarayan":["Use portable balanced snacks for long outdoor celebrations.","Stay hydrated.","Keep fried snacks and sweets to planned portions."],
+    "Thanksgiving":["Start with vegetables and protein before larger starch portions.","Choose one favorite dessert portion.","Use leftovers in balanced meals rather than continuous snacking."],
+    "Independence Day":["Plan grilled or baked options with vegetables.","Keep sugary drinks occasional.","Use safe food storage for outdoor meals."],
+    "Halloween":["Choose a small planned amount of candy.","Eat a normal meal before treats.","Keep sweets away from continuous grazing."],
+    "Christmas":["Balance rich festive meals with vegetables and protein.","Choose a favorite dessert rather than multiple large portions.","Keep regular meals instead of skipping food to compensate."],
+    "Easter":["Keep chocolate and desserts to planned portions.","Build the main meal around vegetables and protein.","Use leftovers safely and mindfully."],
+    "Bonfire Night":["Choose a warm balanced meal before snacks.","Keep sweet drinks and desserts moderate.","Stay hydrated even in cool weather."],
+    "Ferragosto":["Keep outdoor meals balanced with vegetables and protein.","Use safe refrigeration in hot weather.","Keep desserts and sugary drinks moderate."],
+    "Carnival":["Enjoy a favorite treat in a planned portion.","Keep normal meals around celebrations.","Balance richer foods with vegetables and protein."],
+    "New Year":["Keep celebration foods in planned portions.","Alternate sweet drinks with water or unsweetened options.","Return to normal meals the next day instead of extreme restriction."],
+    "Hanami":["Pack a balanced bento-style meal with vegetables and protein.","Keep sweets and refined snacks to planned portions.","Use safe food storage outdoors."],
+    "Obon":["Choose balanced family meals with vegetables and protein.","Keep sweets moderate.","Stay hydrated during travel and gatherings."],
+    "Tanabata":["Pair noodle or rice dishes with vegetables and protein.","Keep sugary festival snacks occasional.","Hydrate regularly in warm weather."],
+    "Setsubun":["Keep bean portions comfortable and balance the rest of the meal.","Choose simple vegetable and protein dishes.","Follow your allergy restrictions carefully."],
+    "Day of the Dead":["Enjoy traditional sweets and breads in planned portions.","Balance celebration meals with beans, vegetables and protein.","Keep hydration regular."],
+    "Three Kings Day":["Enjoy rosca in a planned portion.","Pair it with a balanced meal rather than replacing meals with sweets.","Keep sugary drinks moderate."],
+    "Cinco de Mayo":["Choose bean, vegetable and grilled protein dishes.","Keep fried foods and sugary drinks moderate.","Use sensible portions for chips and dips."]
   };
-  return m[v]||["Select a festival to see personalized guidance."];
+  const tips=(specific[v]||["Keep portions comfortable and build the rest of the day around balanced meals.","Prioritize vegetables, protein and hydration.","Enjoy traditional foods without trying to make celebration eating perfect."]).slice();
+  if(p.diet==="Vegan")tips.push("Choose plant-based versions and verify dairy/egg ingredients in festive foods.");
+  if(allergenTokens(p.allergies).length)tips.push(`Avoid entered allergens (${allergenTokens(p.allergies).join(", ")}) and verify recipes, labels and cross-contact.`);
+  if((p.conditions||[]).some(x=>/diabet|pcos|pcod/i.test(x)))tips.push("Pair carbohydrate-rich festive foods with protein/fiber and keep portions consistent with your care plan.");
+  if((p.conditions||[]).some(x=>/hypertension|high bp|blood pressure/i.test(x)))tips.push("Limit heavily salted packaged snacks and added salt where practical.");
+  if(p.budget==="Low")tips.push("Use homemade versions and seasonal ingredients to keep the celebration budget-friendly.");
+  return tips.slice(0,6);
 }
 const ecoEstimates={
   "Chicken Biryani":3.2,
