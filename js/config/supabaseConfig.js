@@ -14,6 +14,6 @@
   - NEVER put a Supabase secret key or legacy service_role key in this file.
 */
 window.NUTRIAI_SUPABASE = {
-  url: "https://YOUR_PROJECT_REF.supabase.co",
-  publishableKey: "sb_publishable_REPLACE_ME"
+  url: "https://wytglnuksvjwdchzrbxm.supabase.co" ,
+  publishableKey: "sb_publishable_hhu9MNXsYky2kbgOMgqhYg_Slo-NNcW" ,
 };
